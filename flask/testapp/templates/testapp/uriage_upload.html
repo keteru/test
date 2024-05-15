@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="upload">
+	<h2>伝票アップロード</h2>
+	<p>
+	<form method="POST" action="upload" enctype="multipart/form-data">
+		<p>
+		<lebel for="file">売上伝票の選択:</lebel>
+			<input type="file" name="file" accept="application/vnd.me-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+		</p>
+		<button type="submit">アップロード</button>
+	</form>
+	</p>
+	<h2>アップロード済伝票一覧</h2>
+	<script>
+		let idx = 1;
+	</script>
+	{% if upload_error != "" %}
+		<script>
+			var x = {{ upload_error|tojson }};
+			alert(x);
+		</script>
+	{% endif %}
+	<table class="uriage_table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">伝票名</th>
+			</th>
+		</thead>
+		<tbody>
+			{% for file in excelfiles %}
+				<tr>
+					<td>
+						<script>document.write(idx);</script>
+					</td>
+					<td>{{ file }}</td>
+					<td>
+						{% if file in registfiles %}
+							<form action="{{ url_for('upload', file=file) }}" method="POST">
+								<input class="loadbutton" type="button" value="登録済">
+							</form>
+						{% else %}
+							<form action="{{ url_for('upload', load_file=file) }}" method="POST">
+								<input class="loadbutton" type="submit" value="登録">
+							</form>
+						{% endif %}
+					</td>
+					<td>
+						<form action="{{ url_for('upload', delete_file=file) }}" method="POST">
+							<input class="delbutton" type="submit" value="削除">
+						</form>
+					</td>
+					<script>idx = idx + 1;</script>
+				</tr>
+			{% endfor %}
+		<tbody>
+	</table>
+</div>
+{% endblock %}

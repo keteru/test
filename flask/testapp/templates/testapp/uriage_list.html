@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="uriage">
+	<h2>売上一覧</h2>
+		<script>
+        	let idx = 1;
+        </script>
+		<table class="uriage_table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">伝表番号</th>
+				<th scope="col">日付</th>
+				<th scope="col">得意先コード</th>
+				<th scope="col">得意先名</th>
+				<th scope="col">担当者コード</th>
+				<th scope="col">担当者名</th>
+				<th scope="col">番号</th>
+				<th scope="col">商品コード</th>
+				<th scope="col">商品名</th>
+				<th scope="col">数量</th>
+				<th scope="col">単価</th>
+				<th scope="col">金額</th>
+				<th scope="col">備考</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for uriage in uriages %}
+				<tr>
+					<td>
+						<script>document.write(idx);</script>
+					</td>
+					<!-- <td>{{ uriage.id }}</td> -->
+					<td>{{ uriage.denpyo_no }}</td>
+					<td>{{ uriage.date }}</td>
+					<td>{{ uriage.torihikisaki_code }}</td>
+					<td>{{ uriage.torihikisaki_mei }}</td>
+					<td>{{ uriage.tantosha_code }}</td>
+					<td>{{ uriage.tantosha_mei }}</td>
+					<td>{{ uriage.no }}</td>
+					<td>{{ uriage.shohin_code }}</td>
+					<td>{{ uriage.shohin_mei }}</td>
+					<td>{{ uriage.suryo }}</td>
+					<td>{{ uriage.tanka }}</td>
+					<td>{{ uriage.kingaku }}</td>
+					<td>{{ uriage.biko }}</td>
+					<script>idx = idx + 1;</script>
+				</tr>
+				<!--
+				<script>
+					idx = idx + 1;
+				<script>
+				-->
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
