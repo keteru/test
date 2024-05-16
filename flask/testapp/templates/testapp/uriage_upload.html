@@ -38,19 +38,38 @@
 					<td>{{ file }}</td>
 					<td>
 						{% if file in registfiles %}
-							<form action="{{ url_for('upload', file=file) }}" method="POST">
+							<form action="{{ url_for('upload') }}" method="POST">
 								<input class="loadbutton" type="button" value="登録済">
 							</form>
 						{% else %}
-							<form action="{{ url_for('upload', load_file=file) }}" method="POST">
+							<form action="{{ url_for('upload') }}" method="POST">
+								<input type="hidden" name="loadfilename" value={{ file }}>
 								<input class="loadbutton" type="submit" value="登録">
 							</form>
 						{% endif %}
 					</td>
 					<td>
-						<form action="{{ url_for('upload', delete_file=file) }}" method="POST">
-							<input class="delbutton" type="submit" value="削除">
+						<!-- -->
+						<form action="{{ url_for('upload') }}" method="POST" name="delform">
+							<input type="hidden" name="delfilename" value={{ file }}>
+							<input class="delbutton" type="submit" value="削除" id="delbutton">
 						</form>
+						<!--
+						<script>
+							const delbutton = document.getElementById('delbutton');
+							let filename = {{ file|tojson }};
+							delbutton.addEventListener('click', (e) => {
+      							// デフォルトのイベントをキャンセル
+								alert("aaaaaaaaaaaa")
+      							e.preventDefault();
+								var ele = document.createElement('input');
+								ele.name = 'filename';
+								ele.value = filename;
+								document.delform.appendChild(ele);
+								document.delform.submit();
+    						});
+						</script>
+						-->
 					</td>
 					<script>idx = idx + 1;</script>
 				</tr>
