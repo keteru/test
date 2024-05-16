@@ -27,19 +27,20 @@ def uriage_list():
     uriages = session.query(Uriage).order_by(desc(Uriage.id)).all()
     return render_template('testapp/uriage_list.html', uriages=uriages)
 
+@app.route('/uriage_edit', methods=["POST"])
+def uriage_edit():
+    return render_template('testapp/uriage_edit.html')
+
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
 
-    print('--------------')
-    print(request.args)
-    print('--------------')
     upload_error = ''
     if request.method == 'POST' and request.files.get('file') is not None:
         upload_error = upload_exec(request)
-    elif request.method == 'POST' and request.args.get('load_file') is not None:
-        upload_error = load(request.args.get('load_file'))
-    elif request.method == 'POST' and request.args.get('delete_file') is not None:
-        upload_error = delete(request.args.get('delete_file'))
+    elif request.method == 'POST' and request.form.get('loadfilename') is not None:
+        upload_error = load(request.form.get('loadfilename'))
+    elif request.method == 'POST' and request.form.get('delfilename') is not None:
+        upload_error = delete(request.form.get('delfilename'))
 
     excelfiles, registfiles = get_fileinfo()
 
