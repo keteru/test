@@ -45,13 +45,13 @@
 					<td>{{ uriage.tanka }}</td>
 					<td>{{ uriage.kingaku }}</td>
 					<td>{{ uriage.biko }}</td>
+					<td>
+						<form action="{{ url_for('uriage_edit') }}" method="POST">
+							<input class="editbutton" type="submit" value="更新">
+						</form>
+					</td>
 					<script>idx = idx + 1;</script>
 				</tr>
-				<!--
-				<script>
-					idx = idx + 1;
-				<script>
-				-->
 			{% endfor %}
 		</tbody>
 	</table>
