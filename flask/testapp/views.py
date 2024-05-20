@@ -23,13 +23,24 @@ def sample():
     return render_template('testapp/sample.html', my_dict=my_dict)
 
 @app.route('/uriage', methods=["GET", "POST"])
-def uriage_list():
+def uriage():
+    print("===============")
+    print(request.form)
+    print("===============")
+    if request.method == 'POST' and request.form.get('updateid') is not None:
+        uriage_update(request)
     uriages = session.query(Uriage).order_by(desc(Uriage.id)).all()
     return render_template('testapp/uriage_list.html', uriages=uriages)
+
+def uriage_update(request):
+    uriage = session.query(Uriage).filter(Uriage.id==request.form.get('updateid')).first()
+    uriage.biko = request.form.get('biko')
+    session.commit()
 
 @app.route('/uriage_edit', methods=["POST"])
 def uriage_edit():
     return render_template('testapp/uriage_edit.html')
+    # return render_template('testapp/top.html')
 
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
