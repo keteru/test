@@ -30,3 +30,21 @@ h1 {
  border: solid 1px #778ca3;
 }
 
+.textBox{
+    box-sizing: border-box;
+    text-align: center;
+    padding: 2px 2px;
+}
+.dmyTextBox{
+    display: inline-block;
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip: rect(0 0 0 0);
+    padding: 8px 12px;
+}
+
+label{
+ white-space: nowrap;
+}
