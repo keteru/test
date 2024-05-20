@@ -1,4 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div class="edit">
+	<h2>売上情報更新</h2>
+	<p>
+		<form action="{{ url_for('uriage') }}" method="POST">
+			<input class="modorubutton" type="submit" value="一覧に戻る">
+		</form>
+	</p>
+</div>
 {% endblock %}
