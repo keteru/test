@@ -5,6 +5,7 @@
 	<h2>売上一覧</h2>
 		<script>
         	let idx = 1;
+			let init = 0;
         </script>
 		<table class="uriage_table">
 		<thead>
@@ -26,6 +27,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			<span class="dmyTextBox" id="dmyTextBox" aria-hidden="true"></span>
 			{% for uriage in uriages %}
 				<tr>
 					<td>
@@ -33,6 +35,11 @@
 					</td>
 					<!-- <td>{{ uriage.id }}</td> -->
 					<td>{{ uriage.denpyo_no }}</td>
+					<!--
+					<td>
+						<input id="denpyo_no" class="textBox" type="text" name="denpyo_no" value={{ uriage.denpyo_no }}>
+					</td
+					-->
 					<td>{{ uriage.date }}</td>
 					<td>{{ uriage.torihikisaki_code }}</td>
 					<td>{{ uriage.torihikisaki_mei }}</td>
@@ -44,15 +51,101 @@
 					<td>{{ uriage.suryo }}</td>
 					<td>{{ uriage.tanka }}</td>
 					<td>{{ uriage.kingaku }}</td>
-					<td>{{ uriage.biko }}</td>
+					<!--<td>{{ uriage.biko }}</td> -->
 					<td>
-						<form action="{{ url_for('uriage_edit') }}" method="POST">
-							<input class="editbutton" type="submit" value="更新">
+							<input id="biko" class="textBox" type="text" name="biko" value={{ uriage.biko }}>
+							<input id="biko_old" class="textBox" type="hidden" name="biko_old" value={{ uriage.biko }}>
+					</td>
+					<td id="buttonField">
+						<input id="editButton" type="button" value="編集">
+						<form action={{ url_for('uriage') }} method="POST" name="saveform">
+							<input type="hidden" name="updateid" value={{ uriage.id }}>
+							<input id="saveButton" type="button" value="保存">
 						</form>
 					</td>
 					<script>idx = idx + 1;</script>
 				</tr>
 			{% endfor %}
+			<script>
+				let buttonFieldElements = document.querySelectorAll('#buttonField');
+				for (const[i, e] of buttonFieldElements.entries()) {
+					e.style.borderWidth = "0px";
+					e.style.whiteSpace ="nowrap";
+				}
+			</script>
+			<script>
+				let elements = document.querySelectorAll('#biko');
+				for (const[i, e] of elements.entries()) {
+					e.id = "biko" + String(i + 1);
+					const dmyTextBox = document.getElementById('dmyTextBox');
+					function inputWidthAdjust() {
+						dmyTextBox.textContent = e.value;
+						e.style.width = dmyTextBox.clientWidth + 'px';
+						if (init == 0) {
+							e.readOnly = true;
+						}
+						e.style.borderWidth = "0px";
+					}
+					inputWidthAdjust(); //最初の表示
+					e.addEventListener('input', inputWidthAdjust); //入力される度に幅を設定
+				}
+
+				let elementOlds = document.querySelectorAll('#biko_old');
+				for (const[i, e] of elementOlds.entries()) {
+					e.id = "biko_old" + String(i + 1);
+				}
+			</script>
+			<script>
+				init = 1;
+				let ebElements = document.querySelectorAll('#editButton');
+				for (const[i, e] of ebElements.entries()) {
+					function editButtonEvent() {
+						const ret = e.id.match(/[0-9]+/);
+						let bikoElement = document.getElementById("biko" + String(ret[0]));
+						if (bikoElement.readOnly == true) {
+							bikoElement.readOnly = false;
+							bikoElement.style.borderWidth = "1px";
+							let bikoOldElement = document.getElementById("biko_old" + String(ret[0]));
+							bikoOldElement.value = bikoElement.value;
+							let saveElement = document.getElementById("saveButton" + String(ret[0]));
+							saveElement.style.display = 'block';
+							// saveElement.style.visibility = "visible";
+							saveElement.type = 'submit';
+						}
+						else {
+							bikoElement.readOnly = true;
+							bikoElement.style.borderWidth = "0px";
+							let bikoOldElement = document.getElementById("biko_old" + String(ret[0]));
+							bikoElement.value = bikoOldElement.value;
+							let saveElement = document.getElementById("saveButton" + String(ret[0]));
+							saveElement.type = 'hidden';
+							// saveElement.style.visibility= "hidden";
+						}
+
+					}
+					e.id = "editButton" + String(i + 1);
+					e.addEventListener('click', editButtonEvent);
+				}
+			</script>
+			<script>
+				let svElements = document.querySelectorAll('#saveButton');
+				for (const[i, e] of svElements.entries()) {
+					function saveButtonEvent() {
+						// e.preventDefault();
+						var ele = document.createElement('input');
+						ele.name = 'biko';
+						ele.type = 'hidden';
+						const ret = e.id.match(/[0-9]+/);
+						let bikoElement = document.getElementById("biko" + String(ret[0]));
+						ele.value = bikoElement.value;
+						document.forms[0].appendChild(ele);
+					}
+					e.id = "saveButton" + String(i + 1);
+					e.addEventListener('click', saveButtonEvent);
+					e.style.display = 'none';
+					// e.style.visibility = "hidden";
+				}
+			</script>
 		</tbody>
 	</table>
 </div>
